@@ -13,19 +13,21 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
-import { addChats } from '../store/chatSlice';
+import { addChats, addChatUsers, updateChatUsers } from '../store/chatSlice';
 import { addChat } from '../store/userChatSlice';
+import uuid from 'react-uuid';
 const Chat = (props) => {
   const dispatch = useDispatch();
   const { userChat: activeChat } = useSelector((state) => state.userChat);
+  const { chatUsers, loginuser } = useSelector((state) => state.chat);
   const [newChat, setNewChat] = useState('');
-  const { loginuser } = useSelector((state) => state.chat);
 
   const onSaveClick = (chat) => {
+    const newchatId = uuid();
     const chatObject = {
-      id: 3,
+      id: newchatId,
       to: props.chatid,
-      from: 1,
+      from: loginuser.login_id,
       text: chat,
       type: 'own',
     };
@@ -33,6 +35,31 @@ const Chat = (props) => {
 
     dispatch(addChats(chatObject));
     setNewChat('');
+    let indexu = -1;
+    const isFound = chatUsers.some((element) => {
+      indexu += 1;
+      if (element.id === props.chatid) {
+        return true;
+      }
+
+      return false;
+    });
+    const chatUsersObject = {
+      id: props.chatid,
+      name: props.chatname,
+      text: chat,
+    };
+    if (!isFound) {
+      dispatch(addChatUsers(chatUsersObject));
+    } else {
+      const chatUsersObjectu = {
+        id: props.chatid,
+        name: props.chatname,
+        text: chat,
+        updateid: indexu,
+      };
+      dispatch(updateChatUsers(chatUsersObjectu));
+    }
   };
 
   return (
