@@ -71,16 +71,22 @@ const ChatList = () => {
         <Grid item xs={5}>
           <Stack>
             <Search />
-            <Stack direction='row' spacing={9}>
+            <Stack direction='row' spacing={34} sx={{ mb: 2 }}>
               {open && (
                 <Dialog
                   onClose={handleClose}
                   open={open}
                   aria-labelledby='dialog-title'
                   aria-describedby='dialog-description'
+                  sx={{
+                    width: '100%',
+                    maxWidth: 600,
+                    ml: 22,
+                    mb: 5,
+                  }}
                 >
                   <DialogTitle id='dialog-title'>Contacts</DialogTitle>
-                  <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                  <List>
                     {contacts.map((contact) => (
                       <ListItem
                         key={contact.id}
@@ -88,9 +94,14 @@ const ChatList = () => {
                       >
                         <ListItemButton>
                           <ListItemAvatar>
-                            <Avatar>
-                              <PersonIcon />
-                            </Avatar>
+                            <Avatar
+                              sx={{
+                                bgcolor: 'secondary.main',
+                                color: 'secondary.contrastText',
+                              }}
+                              alt={contact.name}
+                              src='/static/images/avatar/1.jpg'
+                            ></Avatar>
                           </ListItemAvatar>
                           <ListItemText primary={contact.name} />
                         </ListItemButton>
@@ -99,43 +110,53 @@ const ChatList = () => {
                   </List>
                 </Dialog>
               )}
-              <Typography variant='h6' spacing={2}>
-                CONVERSATIONS
-              </Typography>
+              <Typography variant='h6'>CONVERSATIONS</Typography>
               <IconButton aria-label='add'>
                 <AddCircleOutlineIcon onClick={handleClickOpen} />
               </IconButton>
             </Stack>
-            <List
-              sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-            >
-              {chatUsers &&
-                chatUsers.map((contact) => (
-                  <ListItem>
-                    <ListItemAvatar
-                      alignItems='flex-start'
-                      key={contact.id}
-                      onClick={() => handleClick(contact.id, contact.name)}
-                    >
-                      <Avatar src='/static/images/avatar/1.jpg' />
-                    </ListItemAvatar>
+            {chatUsers &&
+              chatUsers.map((contact) => (
+                <List
+                  sx={{
+                    width: '100%',
+                    maxWidth: 600,
+                    bgcolor: 'background.paper',
+                  }}
+                >
+                  <ListItem
+                    onClick={() => handleClick(contact.id, contact.name)}
+                  >
+                    <ListItemButton>
+                      <ListItemAvatar alignItems='flex-start' key={contact.id}>
+                        <Avatar
+                          sx={{
+                            bgcolor: 'secondary.main',
+                            color: 'secondary.contrastText',
+                          }}
+                          alt={contact.name}
+                          src='/static/images/avatar/1.jpg'
+                        />
+                      </ListItemAvatar>
 
-                    <ListItemText
-                      alignItems='flex-start'
-                      key={contact.id}
-                      onClick={() => handleClick(contact.id, contact.name)}
-                      primary={contact.name}
-                      secondary={
-                        <React.Fragment>{contact.text}</React.Fragment>
-                      }
-                    />
-                    <Divider variant='inset' component='li' />
+                      <ListItemText
+                        alignItems='flex-start'
+                        key={contact.id}
+                        primary={contact.name}
+                        secondary={
+                          <React.Fragment>{contact.text}</React.Fragment>
+                        }
+                      />
+                    </ListItemButton>
                   </ListItem>
-                ))}
-            </List>
+                  <Divider variant='inset' component='li' />
+                </List>
+              ))}
           </Stack>
         </Grid>
-        {isShown && <Chat chatid={activeChatId} chatname={activeChatName} />}
+        <Grid item xs={7}>
+          {isShown && <Chat chatid={activeChatId} chatname={activeChatName} />}
+        </Grid>
       </Stack>
     </Grid>
   );
