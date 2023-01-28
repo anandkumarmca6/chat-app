@@ -13,15 +13,14 @@ import {
   Typography,
   Stack,
   Grid,
+  TextField,
   ListItemButton,
   DialogTitle,
   IconButton,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import PersonIcon from '@mui/icons-material/Person';
 
 import Chat from './Chat';
-import Search from './Search';
 
 const ChatList = () => {
   const dispatch = useDispatch();
@@ -32,6 +31,8 @@ const ChatList = () => {
   const [activeChatId, setActiveChatId] = useState(null);
   const [activeChatName, setActiveChatName] = useState(null);
   const [open, setOpen] = React.useState(false);
+  const [searchInput, setSearchInput] = useState('');
+  const [filteredResults, setFilteredResults] = useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,7 +61,18 @@ const ChatList = () => {
     }
     dispatch(setUserChat(output));
   };
-
+  const searchItems = (searchValue) => {
+    setSearchInput(searchValue);
+    if (searchInput !== '') {
+      const filteredData = chatUsers.filter((item) => {
+        return Object.values(item)
+          .join('')
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
+      });
+      setFilteredResults(filteredData);
+    }
+  };
   return (
     <Grid container spacing={2} direction='column'>
       <Stack
@@ -70,7 +82,12 @@ const ChatList = () => {
       >
         <Grid item xs={5}>
           <Stack>
-            <Search />
+            <Stack>
+              <TextField
+                label='Search By Name'
+                onChange={(e) => searchItems(e.target.value)}
+              />
+            </Stack>
             <Stack direction='row' spacing={34} sx={{ mb: 2 }}>
               {open && (
                 <Dialog
@@ -115,7 +132,47 @@ const ChatList = () => {
                 <AddCircleOutlineIcon onClick={handleClickOpen} />
               </IconButton>
             </Stack>
-            {chatUsers &&
+            {searchInput.length > 1 &&
+              filteredResults &&
+              filteredResults.map((contact) => (
+                <List
+                  sx={{
+                    width: '100%',
+                    maxWidth: 600,
+                    bgcolor: 'background.paper',
+                  }}
+                >
+                  <ListItem
+                    onClick={() => handleClick(contact.id, contact.name)}
+                  >
+                    <ListItemButton>
+                      <ListItemAvatar alignItems='flex-start' key={contact.id}>
+                        <Avatar
+                          sx={{
+                            bgcolor: 'secondary.main',
+                            color: 'secondary.contrastText',
+                          }}
+                          alt={contact.name}
+                          src='/static/images/avatar/1.jpg'
+                        />
+                      </ListItemAvatar>
+
+                      <ListItemText
+                        alignItems='flex-start'
+                        key={contact.id}
+                        primary={contact.name}
+                        secondary={
+                          <React.Fragment>{contact.text}</React.Fragment>
+                        }
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                  <Divider variant='inset' component='li' />
+                </List>
+              ))}
+
+            {searchInput.length < 1 &&
+              chatUsers &&
               chatUsers.map((contact) => (
                 <List
                   sx={{
