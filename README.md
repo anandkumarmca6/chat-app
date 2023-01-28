@@ -2,16 +2,16 @@
 # chat-app
 
 # Overview
-Create the frontend for a chat application. You can check out the mockups down below.
+Create the frontend for a chat application. 
 # Functionalties
--	Assume you are a dummy logged in user.
+- Assume you are a dummy logged in user.
 - Use a json file to load some dummy data in the project.
 - Search : conversations should be searchable by contact name.
 # Left sidebar:
 - Show all the conversations created here
 - Each conversation should have the contact name and some text of the last message in the chat
 # Create conversation button
-- On clicking this open a pop up and load all the contacts (from the dummy data.json/js file).
+- On clicking this open a pop up and load all the contacts .
 - On clicking the contact should start a new conversation (if no conversation was previously started). Or open the existing conversation for that contact.
 # Right side view
 - Show the current selected conversation messages
