@@ -9,24 +9,31 @@ const chatSlice = createSlice({
     loginuser: {},
   },
   reducers: {
+    // set all chats
     setChat(state, action) {
       state.chats = action.payload;
     },
+    // set contact list
     setContacts(state, action) {
       state.contacts = action.payload;
     },
+    // add new chat to chats list
     addChats(state, action) {
       state.chats.push(action.payload);
     },
+    // set login user
     setLoginUser(state, action) {
       state.loginuser = action.payload;
     },
+    // set conversation users list
     setChatUsers(state, action) {
       state.chatUsers = action.payload;
     },
+    // Add user to conversation users list
     addChatUsers(state, action) {
       state.chatUsers.push(action.payload);
     },
+    // Update last message into existing user's conversation  list
     updateChatUsers(state, action) {
       return {
         ...state,
@@ -58,6 +65,7 @@ export default chatSlice.reducer;
 export function fetchChat() {
   return async function fetchChatThunk(dispatch, getState) {
     try {
+      // get data from json url
       const res = await fetch('https://api.npoint.io/259665caee1dd0281830');
       const data = await res.json();
       dispatch(setChat(data.chats));

@@ -4,10 +4,13 @@ const userChatSlice = createSlice({
   initialState: {
     userChat: [],
   },
+
   reducers: {
+    // set chat of particular user
     setUserChat(state, action) {
       state.userChat = action.payload;
     },
+    // add new chat for  particular user
     addChat(state, action) {
       state.userChat.push(action.payload);
     },
