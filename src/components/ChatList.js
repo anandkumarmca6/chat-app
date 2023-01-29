@@ -76,7 +76,6 @@ const ChatList = () => {
   // Search By user name
   const searchItems = (searchValue) => {
     setSearchInput(searchValue);
-    console.log(searchValue);
     if (searchInput !== '') {
       const filteredData = chatUsers.filter((item) => {
         return item.name.toLowerCase() === searchInput.toLowerCase();

@@ -82,12 +82,11 @@ const Chat = (props) => {
       </Stack>
       {activeChat &&
         activeChat.map((chat) => (
-          <List sx={{ width: '100%' }}>
+          <List sx={{ width: '100%' }} key={chat.id}>
             <Divider variant='inset' component='li' />
             {/* If chat is from other user */}
             {chat.type === 'others' && (
               <Grid
-                xs
                 display='flex'
                 justifyContent='flex-start'
                 alignItems='flex-start'
@@ -118,7 +117,6 @@ const Chat = (props) => {
             {/* If chat is from logged in user */}
             {chat.type === 'own' && (
               <Grid
-                xs
                 display='flex'
                 justifyContent='flex-end'
                 alignItems='flex-end'
