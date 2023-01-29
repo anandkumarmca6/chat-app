@@ -19,6 +19,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import uuid from 'react-uuid';
 
 import Chat from './Chat';
 
@@ -33,7 +34,7 @@ const ChatList = () => {
   const [activeChatId, setActiveChatId] = useState(null);
   const [activeChatName, setActiveChatName] = useState(null);
   // Set state for contact dialog
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   // Set state for search
   const [searchInput, setSearchInput] = useState('');
   const [filteredResults, setFilteredResults] = useState([]);
@@ -51,6 +52,9 @@ const ChatList = () => {
     dispatch(fetchChat());
   }, [dispatch]);
 
+  useEffect(() => {
+    searchItems(searchInput);
+  }, [searchInput]);
   // Set states for chat visibilty for particular user after click on any user list item
   const handleClick = (id, name) => {
     setOpen(false);
@@ -72,10 +76,12 @@ const ChatList = () => {
   // Search By user name
   const searchItems = (searchValue) => {
     setSearchInput(searchValue);
+    console.log(searchValue);
     if (searchInput !== '') {
       const filteredData = chatUsers.filter((item) => {
-        return item.name.toLowerCase() == searchInput.toLowerCase();
+        return item.name.toLowerCase() === searchInput.toLowerCase();
       });
+
       setFilteredResults(filteredData);
     }
   };
@@ -92,7 +98,7 @@ const ChatList = () => {
             <Stack>
               <TextField
                 label='Search By Name'
-                onChange={(e) => searchItems(e.target.value)}
+                onChange={(e) => setSearchInput(e.target.value)}
               />
             </Stack>
             <Stack direction='row' spacing={34} sx={{ mb: 2 }}>
@@ -111,10 +117,9 @@ const ChatList = () => {
                   }}
                 >
                   <DialogTitle id='dialog-title'>Contacts</DialogTitle>
-                  <List>
+                  <List key={uuid()}>
                     {contacts.map((contact) => (
                       <ListItem
-                        key={contact.id}
                         onClick={() => handleClick(contact.id, contact.name)}
                       >
                         <ListItemButton>
@@ -137,8 +142,8 @@ const ChatList = () => {
               )}
               {/* Open contact Dialog */}
               <Typography variant='h6'>CONVERSATIONS</Typography>
-              <IconButton aria-label='add'>
-                <AddCircleOutlineIcon onClick={handleClickOpen} />
+              <IconButton aria-label='add' onClick={handleClickOpen}>
+                <AddCircleOutlineIcon />
               </IconButton>
             </Stack>
             {/* If search is performed by name  */}
@@ -146,6 +151,7 @@ const ChatList = () => {
               filteredResults &&
               filteredResults.map((contact) => (
                 <List
+                  key={uuid()}
                   sx={{
                     width: '100%',
                     maxWidth: 600,
@@ -156,7 +162,7 @@ const ChatList = () => {
                     onClick={() => handleClick(contact.id, contact.name)}
                   >
                     <ListItemButton>
-                      <ListItemAvatar alignItems='flex-start' key={contact.id}>
+                      <ListItemAvatar>
                         <Avatar
                           sx={{
                             bgcolor: 'secondary.main',
@@ -168,8 +174,6 @@ const ChatList = () => {
                       </ListItemAvatar>
 
                       <ListItemText
-                        alignItems='flex-start'
-                        key={contact.id}
                         primary={contact.name}
                         secondary={
                           <React.Fragment>{contact.text}</React.Fragment>
@@ -185,6 +189,7 @@ const ChatList = () => {
               chatUsers &&
               chatUsers.map((contact) => (
                 <List
+                  key={uuid()}
                   sx={{
                     width: '100%',
                     maxWidth: 600,
@@ -195,7 +200,7 @@ const ChatList = () => {
                     onClick={() => handleClick(contact.id, contact.name)}
                   >
                     <ListItemButton>
-                      <ListItemAvatar alignItems='flex-start' key={contact.id}>
+                      <ListItemAvatar>
                         <Avatar
                           sx={{
                             bgcolor: 'secondary.main',
@@ -207,8 +212,6 @@ const ChatList = () => {
                       </ListItemAvatar>
 
                       <ListItemText
-                        alignItems='flex-start'
-                        key={contact.id}
                         primary={contact.name}
                         secondary={
                           <React.Fragment>{contact.text}</React.Fragment>
