@@ -74,10 +74,6 @@ const ChatList = () => {
     setSearchInput(searchValue);
     if (searchInput !== '') {
       const filteredData = chatUsers.filter((item) => {
-        // return Object.values(item)
-        //   .join('')
-        //   .toLowerCase()
-        //   .includes(searchInput.toLowerCase());
         item.name.toLowerCase() == searchInput.toLowerCase();
       });
       setFilteredResults(filteredData);
